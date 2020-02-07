@@ -16,10 +16,10 @@ import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
 
     <nz-form-control [nzOffset]="5">
     <nz-collapse nzAccordion>
-      <nz-collapse-panel *ngFor="let toc of myForm.get('form_titles')['controls']; let i=index;" [nzHeader]="toc.value">
+      <nz-collapse-panel *ngFor="let chapter of myForm.get('form_titles')['controls']; let i=index;" [nzHeader]="chapter.value">
         <nz-form-item>
           <nz-form-label [nzSpan]="4">Chapter Title</nz-form-label>
-          <nz-form-control [nzSpan]="20"><input nz-input [formControl]="toc" /></nz-form-control>
+          <nz-form-control [nzSpan]="20"><input nz-input [formControl]="chapter" /></nz-form-control>
           <nz-form-label [nzSpan]="4">Chapter Content</nz-form-label>
           <nz-form-control [nzSpan]="20"><textarea  nz-input rows="5" placeholder="Please copy/paste the content from the book attachment" [formControl]="myForm.get('form_contents')['controls'][i]"></textarea></nz-form-control>
         </nz-form-item>
@@ -39,9 +39,6 @@ import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
       h1{
         text-align: center;
       }
-      textarea{
-        margin-top: 5px;
-      }
     `
   ]
 })
@@ -51,14 +48,17 @@ export class AppComponent {
 
   toc_chapters = [
     {
+      id: 1,
       title: 'This is panel header 1',
       content: 'content 1'
     },
     {
+      id: 2,
       title: 'This is panel header 2',
       content: 'content 2'
     },
     {
+      id: 3,
       title: 'This is panel header 3',
       content: 'content 3'
     }
@@ -85,6 +85,12 @@ export class AppComponent {
   }
 
   log() {
-    console.log(this.myForm.value)
+    // merge change into original array
+    const updated_toc = this.toc_chapters.map((toc, i) => {
+      toc.title = this.myForm.value.form_titles[i];
+      toc.content = this.myForm.value.form_contents[i];
+      return toc;
+    });
+    console.log(updated_toc)
   }
 }
